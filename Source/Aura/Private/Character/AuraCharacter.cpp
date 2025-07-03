@@ -4,7 +4,7 @@
 #include "Character/AuraCharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include <Player/AuraPlayerState.h>
-#include "AbilitySystemComponent.h" // 추가: UAbilitySystemComponent 정의 포함
+#include "AbilitySystemComponent.h"
 
 
 AAuraCharacter::AAuraCharacter()
