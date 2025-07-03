@@ -3,10 +3,12 @@
 
 #include "Character/AuraEnemy.h"
 
-void AAuraEnemy::HighlughtActor()
+void AAuraEnemy::HighlightActor()
 {
+	bIsHighlighted = true;
 }
 
 void AAuraEnemy::UnHighlightActor()
 {
+	bIsHighlighted = false;
 }

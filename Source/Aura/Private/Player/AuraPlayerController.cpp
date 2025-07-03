@@ -5,9 +5,17 @@
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 
+
 AAuraPlayerController::AAuraPlayerController()
 {
 	bReplicates = true;
+}
+
+void AAuraPlayerController::PlayerTick(float DeltaTime)
+{
+	Super::PlayerTick(DeltaTime);
+
+	CursorTrace();
 }
 
 void AAuraPlayerController::BeginPlay()
@@ -50,5 +58,40 @@ void AAuraPlayerController::Move(const FInputActionValue& Value)
 	{
 		const FVector Direction = (RightDirection * InputAxisVector.X) + (ForwardDirection * InputAxisVector.Y);
 		ControlledPawn->AddMovementInput(Direction);
+	}
+}
+
+void AAuraPlayerController::CursorTrace()
+{
+	FHitResult CursorHit;
+
+	GetHitResultUnderCursor(ECC_Visibility, false, CursorHit);
+
+	if (!CursorHit.bBlockingHit) return;
+
+	LastActor = CurrentActor;
+	CurrentActor = CursorHit.GetActor();
+
+	if (!LastActor)
+	{
+		if (CurrentActor)
+		{
+			CurrentActor.GetInterface()->HighlightActor();
+		}
+	}
+	else
+	{
+		if (!CurrentActor) 
+		{
+			LastActor->UnHighlightActor();
+		}
+		else
+		{
+			if (CurrentActor != LastActor)
+			{
+				LastActor->UnHighlightActor();
+				CurrentActor->HighlightActor();
+			}
+		}
 	}
 }
