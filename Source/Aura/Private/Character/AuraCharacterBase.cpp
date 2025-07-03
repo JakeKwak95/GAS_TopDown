@@ -4,6 +4,11 @@
 #include "Character/AuraCharacterBase.h"
 #include "Aura/Aura.h"
 
+UAbilitySystemComponent* AAuraCharacterBase::GetAbilitySystemComponent() const
+{
+	return AbilitySystemComponent;
+}
+
 AAuraCharacterBase::AAuraCharacterBase()
 {
 	PrimaryActorTick.bCanEverTick = false;
