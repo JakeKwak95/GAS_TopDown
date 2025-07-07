@@ -42,6 +42,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "WidgetController")
 	void SetWidgetControllerParams(const FWidgetControllerParams& Params);
 
+	virtual void BroadcastInitialValues();
 	
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "WidgetController")
