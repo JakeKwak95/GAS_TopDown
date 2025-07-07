@@ -7,6 +7,29 @@ void AAuraHUD::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UUserWidget* UserWidget = CreateWidget<UUserWidget>(GetWorld(), OverlayWidgetClass);
-	if (UserWidget) UserWidget->AddToViewport();
+
+}
+
+UOverlayWidgetController* AAuraHUD::GetOverlayWidgetController(const FWidgetControllerParams& Params)
+{
+	if (!OverlayWidgetController)
+	{
+		OverlayWidgetController = NewObject<UOverlayWidgetController>(this, OverlayWidgetControllerClass);
+		OverlayWidgetController->SetWidgetControllerParams(Params);
+	}
+	return OverlayWidgetController;
+}
+
+void AAuraHUD::InitOverlay(APlayerController* PC, APlayerState* PS, UAbilitySystemComponent* ASC, UAttributeSet* AS)
+{
+	checkf(OverlayWidgetClass, TEXT("OverlayWidgetClass is not set in BP_AuraHUD!"));
+	checkf(OverlayWidgetControllerClass, TEXT("OverlayWidgetControllerClass is not set in BP_AuraHUD!"));
+
+	UAuraUserWidget* UserWidget = CreateWidget<UAuraUserWidget>(GetWorld(), OverlayWidgetClass);
+	if (!UserWidget) return;
+
+	const FWidgetControllerParams Params(PC, PS, ASC, AS);
+	UserWidget->SetWidgetController(GetOverlayWidgetController(Params));
+
+	UserWidget->AddToViewport();
 }
