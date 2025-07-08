@@ -2,6 +2,7 @@
 
 
 #include "AbilitySystem/AuraAttributeSet.h"
+#include "GameFramework/Character.h"
 #include "Net/UnrealNetwork.h"
 
 UAuraAttributeSet::UAuraAttributeSet()
