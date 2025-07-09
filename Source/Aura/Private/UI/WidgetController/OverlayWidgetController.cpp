@@ -28,12 +28,14 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 		AuraAttributeSet->GetMaxManaAttribute()).AddUObject(this, &UOverlayWidgetController::MaxManaChangedCallback);
 
 	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->EffectAssetTags.AddLambda(
-		[](const FGameplayTagContainer& AssetTag) 
+		[this](const FGameplayTagContainer& AssetTag) 
 		{
 			for (const FGameplayTag& Tag : AssetTag)
 			{
 				// HUD¿¡ Ç¥½Ã
 				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("GE Tag: %s"), *Tag.ToString()));
+
+				auto* Row = GetDataTableRowByTag<FUIWidgetRow>(MessageWidgetDataTable, Tag);
 			}
 		}
 	);

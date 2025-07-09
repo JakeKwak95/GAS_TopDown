@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "UI/WidgetController/AuraWidgetController.h"
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
+#include "Engine/DataTable.h"
 #include "OverlayWidgetController.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHealthChangedSigniture, float, NewHealth);
@@ -65,4 +66,14 @@ protected:
 	void MaxHealthChangedCallback(const FOnAttributeChangeData& Data) const;
 	void ManaChangedCallback(const FOnAttributeChangeData& Data) const;
 	void MaxManaChangedCallback(const FOnAttributeChangeData& Data) const;
+
+	template<typename T>
+	T* GetDataTableRowByTag(UDataTable* DataTable, const FGameplayTag& Tag);
 };
+
+template<typename T>
+T* UOverlayWidgetController::GetDataTableRowByTag(UDataTable* DataTable, const FGameplayTag& Tag)
+{
+	return DataTable->FindRow<T>(Tag.GetTagName(), TEXT(""));
+}
+
