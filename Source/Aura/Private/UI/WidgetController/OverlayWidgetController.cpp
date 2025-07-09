@@ -32,10 +32,14 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 		{
 			for (const FGameplayTag& Tag : AssetTag)
 			{
-				// HUD¿¡ Ç¥½Ã
-				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("GE Tag: %s"), *Tag.ToString()));
+				FGameplayTag MassageTag = FGameplayTag::RequestGameplayTag(FName("Message"));
+				if (!Tag.MatchesTag(MassageTag))
+				{
+					continue;
+				}
 
-				auto* Row = GetDataTableRowByTag<FUIWidgetRow>(MessageWidgetDataTable, Tag);
+				const auto* Row = GetDataTableRowByTag<FUIWidgetRow>(MessageWidgetDataTable, Tag);
+				MessageWidgetRowDelegate.Broadcast(*Row);
 			}
 		}
 	);
