@@ -41,8 +41,9 @@ void AAuraCharacterBase::ApplyEffectToSelf(TSubclassOf<UGameplayEffect> EffectCl
 
 void AAuraCharacterBase::InitializeDefaultAttributes() const
 {
-	ApplyEffectToSelf(DefaultPrimaryAttributes);
-	ApplyEffectToSelf(DefaultSecondaryAttributes);
+	ApplyEffectToSelf(DefaultPrimaryAttributes,GetPlayerLevel());
+	ApplyEffectToSelf(DefaultSecondaryAttributes, GetPlayerLevel());
+	ApplyEffectToSelf(InitialAttributes, GetPlayerLevel());
 }
 
 
