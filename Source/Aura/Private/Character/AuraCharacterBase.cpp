@@ -33,7 +33,8 @@ void AAuraCharacterBase::ApplyEffectToSelf(TSubclassOf<UGameplayEffect> EffectCl
 
 	check(EffectClass);
 
-	const FGameplayEffectContextHandle EffectContext = ASC->MakeEffectContext();
+	FGameplayEffectContextHandle EffectContext = ASC->MakeEffectContext();
+	EffectContext.AddSourceObject(this);
 	const FGameplayEffectSpecHandle EffectSpecHandle = ASC->MakeOutgoingSpec(EffectClass, level, EffectContext);
 	ASC->ApplyGameplayEffectSpecToTarget(*EffectSpecHandle.Data.Get(), ASC);
 }
