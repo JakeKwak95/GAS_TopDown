@@ -2,6 +2,7 @@
 
 
 #include "Character/AuraCharacterBase.h"
+#include "AbilitySystemComponent.h"
 #include "Aura/Aura.h"
 
 UAbilitySystemComponent* AAuraCharacterBase::GetAbilitySystemComponent() const
@@ -24,7 +25,17 @@ AAuraCharacterBase::AAuraCharacterBase()
 void AAuraCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
-	
+}
+
+void AAuraCharacterBase::InitializePrimaryAttributes() const
+{
+	UAbilitySystemComponent* ASC = GetAbilitySystemComponent();
+
+	check(DefaultPrimaryAttributes);
+
+    const FGameplayEffectContextHandle EffectContext = ASC->MakeEffectContext();
+    const FGameplayEffectSpecHandle EffectSpecHandle = ASC->MakeOutgoingSpec(DefaultPrimaryAttributes, 1.0f, EffectContext);
+	ASC->ApplyGameplayEffectSpecToTarget(*EffectSpecHandle.Data.Get(), ASC);
 }
 
 
