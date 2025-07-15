@@ -48,4 +48,11 @@ protected:
 
 	void ApplyEffectToSelf(TSubclassOf<UGameplayEffect> EffectClass, float level) const;
 	void InitializeDefaultAttributes() const;
+
+	UFUNCTION(BlueprintCallable, Category = "Abilities")
+	void AddCharacterAbilities();
+
+private:
+	UPROPERTY(EditAnywhere, Category = "Abilities")
+	TArray<TSubclassOf<UGameplayAbility>> StartupAbilities;
 };

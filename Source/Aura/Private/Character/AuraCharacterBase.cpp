@@ -46,4 +46,11 @@ void AAuraCharacterBase::InitializeDefaultAttributes() const
 	ApplyEffectToSelf(InitialAttributes, GetPlayerLevel());
 }
 
+void AAuraCharacterBase::AddCharacterAbilities()
+{
+	if(!HasAuthority())	return;
+
+
+}
+
 
