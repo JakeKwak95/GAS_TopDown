@@ -25,21 +25,21 @@ inline void UAuraInputComponent::BindAbilityActions(const UAuraInputConfig* Inpu
 {
 	if (!InputCinfig) return;
 
-	for (const FAuraInputAction& Action : InputCinfig->AbilityActions)
+	for (const FAuraInputAction& Action : InputCinfig->AbilityInputActions)
 	{
 		if (Action.InputAction && Action.InputTag.IsValid())
 		{
 			if (PressedFun)
 			{
-				BindAction(Action.Action, ETriggerEvent::Started, Object, PressedFun, Action.InputTag);
+				BindAction(Action.InputAction, ETriggerEvent::Started, Object, PressedFun, Action.InputTag);
 			}
 			if (ReleasedFunc)
 			{
-				BindAction(Action.Action, ETriggerEvent::Completed, Object, ReleasedFunc, Action.InputTag);
+				BindAction(Action.InputAction, ETriggerEvent::Completed, Object, ReleasedFunc, Action.InputTag);
 			}
 			if (HeldFunc)
 			{
-				BindAction(Action.Action, ETriggerEvent::Triggered, Object, HeldFunc, Action.InputTag);
+				BindAction(Action.InputAction, ETriggerEvent::Triggered, Object, HeldFunc, Action.InputTag);
 			}
 		}
 	}
