@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "AbilitySystemInterface.h"
 #include "Interaction/CombatInterface.h"
+#include <Abilities/GameplayAbility.h>
 
 #include "AuraCharacterBase.generated.h"
 

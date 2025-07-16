@@ -4,6 +4,7 @@
 #include "Character/AuraCharacterBase.h"
 #include "AbilitySystemComponent.h"
 #include "Aura/Aura.h"
+#include <AbilitySystem/AuraAbilitySystemComponent.h>
 
 UAbilitySystemComponent* AAuraCharacterBase::GetAbilitySystemComponent() const
 {
@@ -50,7 +51,8 @@ void AAuraCharacterBase::AddCharacterAbilities()
 {
 	if(!HasAuthority())	return;
 
-
+	UAuraAbilitySystemComponent* AuraASC = CastChecked<UAuraAbilitySystemComponent>(GetAbilitySystemComponent());
+	AuraASC->AddCharacterAbilities(StartupAbilities);
 }
 
 
