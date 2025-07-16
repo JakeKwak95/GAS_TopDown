@@ -13,6 +13,7 @@
 class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
+class UAuraAbilitySystemComponent;
 
 /**
  * 
@@ -51,4 +52,9 @@ private:
 
 	TScriptInterface<IEnemyInterface> LastActor;
 	TScriptInterface<IEnemyInterface> CurrentActor;
+
+	UPROPERTY()
+	TObjectPtr<UAuraAbilitySystemComponent> AuraAbilitySystemComponent;
+
+	UAuraAbilitySystemComponent* GetASC();
 };
