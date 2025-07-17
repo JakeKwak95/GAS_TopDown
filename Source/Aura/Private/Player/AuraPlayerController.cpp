@@ -42,10 +42,8 @@ void AAuraPlayerController::AutoRun()
 
 		const float DistanceToDestination = (LocationOnSpline - CachedDestination).Length();
 
-		if (DistanceToDestination <= AutoRunAcceptanceRadius)
-		{
+		if (DistanceToDestination <= AutoRunAcceptanceRadius)	
 			bAutoRunning = false;
-		}
 	}
 }
 
@@ -56,10 +54,8 @@ void AAuraPlayerController::BeginPlay()
 	check(AuraContext);
 
 	UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer());
-	if (Subsystem)
-	{
-	Subsystem->AddMappingContext(AuraContext, 0);
-	}
+	if (Subsystem)	
+		Subsystem->AddMappingContext(AuraContext, 0);
 
 	bShowMouseCursor = true;
 	DefaultMouseCursor = EMouseCursor::Default;
@@ -119,7 +115,6 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 				for (const FVector& Point : NavPath->PathPoints)
 				{
 					Spline->AddSplinePoint(Point, ESplineCoordinateSpace::World, false);
-					DrawDebugSphere(GetWorld(), Point, 8.0f, 8, FColor::Green, false, 5.0f);
 				}
 				Spline->UpdateSpline();
 				CachedDestination = NavPath->PathPoints.Last();
@@ -153,11 +148,9 @@ void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 	{
 		FollowTime += GetWorld()->GetDeltaSeconds();
 
-		FHitResult Hit;
-		if (GetHitResultUnderCursor(ECC_Visibility, false, Hit))
-		{
-			CachedDestination = Hit.ImpactPoint;
-		}
+		if(CursorHit.bBlockingHit)
+			CachedDestination = CursorHit.ImpactPoint;
+		
 
 		if (APawn* ControlledPawn = GetPawn())
 		{
@@ -185,8 +178,6 @@ void AAuraPlayerController::Move(const FInputActionValue& Value)
 
 void AAuraPlayerController::CursorTrace()
 {
-	FHitResult CursorHit;
-
 	GetHitResultUnderCursor(ECC_Visibility, false, CursorHit);
 
 	if (!CursorHit.bBlockingHit) return;
@@ -194,27 +185,10 @@ void AAuraPlayerController::CursorTrace()
 	LastActor = CurrentActor;
 	CurrentActor = CursorHit.GetActor();
 
-	if (!LastActor)
+	if(LastActor != CurrentActor)
 	{
-		if (CurrentActor)
-		{
-			CurrentActor.GetInterface()->HighlightActor();
-		}
-	}
-	else
-	{
-		if (!CurrentActor) 
-		{
-			LastActor->UnHighlightActor();
-		}
-		else
-		{
-			if (CurrentActor != LastActor)
-			{
-				LastActor->UnHighlightActor();
-				CurrentActor->HighlightActor();
-			}
-		}
+		if (LastActor)	LastActor->UnHighlightActor();
+		if (CurrentActor) CurrentActor->HighlightActor();
 	}
 }
 

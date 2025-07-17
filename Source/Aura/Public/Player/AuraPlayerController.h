@@ -51,9 +51,11 @@ private:
 	void Move(const FInputActionValue& Value);
 
 	void CursorTrace();
+	FHitResult CursorHit;
 
 	TScriptInterface<IEnemyInterface> LastActor;
 	TScriptInterface<IEnemyInterface> CurrentActor;
+
 
 	UPROPERTY()
 	TObjectPtr<UAuraAbilitySystemComponent> AuraAbilitySystemComponent;
