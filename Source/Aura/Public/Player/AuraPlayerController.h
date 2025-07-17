@@ -29,6 +29,7 @@ public:
 
 	virtual void PlayerTick(float DeltaTime) override;
 
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -71,4 +72,5 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USplineComponent> Spline;
 
+	void AutoRun();
 };
