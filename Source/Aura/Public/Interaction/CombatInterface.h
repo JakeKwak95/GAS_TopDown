@@ -27,4 +27,8 @@ public:
 	{
 		return 0; // Default level, can be overridden by implementing classes
 	}
+
+	virtual FVector GetCombatSocketLocation() const {
+		return FVector::ZeroVector;
+	}
 };
