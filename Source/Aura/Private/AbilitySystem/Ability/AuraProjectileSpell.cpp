@@ -8,10 +8,11 @@
 void UAuraProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
+}
 
-	bool bIsServer = HasAuthority(&ActivationInfo);
-
-	if (!bIsServer) return;
+void UAuraProjectileSpell::SpawnProjectile() const
+{
+	if (!GetAvatarActorFromActorInfo()->HasAuthority()) return;
 
 	ICombatInterface* CombatInterface = Cast<ICombatInterface>(GetAvatarActorFromActorInfo());
 
@@ -21,12 +22,12 @@ void UAuraProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 	SpawnTransform.SetLocation(CombatInterface->GetCombatSocketLocation());
 	AActor* OwningActor = GetOwningActorFromActorInfo();
 
-	 auto Projectile = GetWorld()->SpawnActorDeferred<AAuraProjectile>(
-		ProjectileClass, 
-		SpawnTransform, 
-		OwningActor, 
-		Cast<APawn>(OwningActor), 
+	auto Projectile = GetWorld()->SpawnActorDeferred<AAuraProjectile>(
+		ProjectileClass,
+		SpawnTransform,
+		OwningActor,
+		Cast<APawn>(OwningActor),
 		ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
 
-	 Projectile->FinishSpawning(SpawnTransform);
+	Projectile->FinishSpawning(SpawnTransform);
 }
