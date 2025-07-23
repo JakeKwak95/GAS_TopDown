@@ -5,6 +5,7 @@
 #include "AbilitySystemComponent.h"
 #include "Aura/Aura.h"
 #include <AbilitySystem/AuraAbilitySystemComponent.h>
+#include "Components/CapsuleComponent.h"
 
 UAbilitySystemComponent* AAuraCharacterBase::GetAbilitySystemComponent() const
 {
@@ -14,6 +15,9 @@ UAbilitySystemComponent* AAuraCharacterBase::GetAbilitySystemComponent() const
 AAuraCharacterBase::AAuraCharacterBase()
 {
 	PrimaryActorTick.bCanEverTick = false;
+
+	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera, ECollisionResponse::ECR_Ignore);
+	GetMesh()->SetCollisionResponseToChannel(ECC_Camera, ECollisionResponse::ECR_Ignore);
 
 	Weapon = CreateDefaultSubobject<USkeletalMeshComponent>("Weapon");
 	Weapon->SetupAttachment(GetMesh(), FName("WeaponHandSocket"));

@@ -74,6 +74,8 @@ void AAuraPlayerController::SetupInputComponent()
 	UAuraInputComponent* AuraInputComponent = CastChecked<UAuraInputComponent>(InputComponent);
 
 	AuraInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AAuraPlayerController::Move);
+	AuraInputComponent->BindAction(ShiftAction, ETriggerEvent::Started, this, &AAuraPlayerController::ShiftPressed);
+	AuraInputComponent->BindAction(ShiftAction, ETriggerEvent::Completed, this, &AAuraPlayerController::ShiftReleased);
 
 	AuraInputComponent->BindAbilityActions(InputConfig, this,
 		&AAuraPlayerController::AbilityInputTagPressed,
@@ -99,7 +101,7 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 		return;
 	}
 
-	if (bTargeting)
+	if (bTargeting || bShiftKeyDown)
 	{
 		GetASC()->AbilityInputTagReleased(InputTag);
 	}
@@ -140,11 +142,7 @@ void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 		return;
 	}
 
-	if (bTargeting)
-	{
-		GetASC()->AbilityInputTagHeld(InputTag);
-	}
-	else
+	if (!bTargeting && !bShiftKeyDown)
 	{
 		FollowTime += GetWorld()->GetDeltaSeconds();
 
@@ -157,6 +155,10 @@ void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 			const FVector WorldDirection = (CachedDestination - ControlledPawn->GetActorLocation()).GetSafeNormal();
 			ControlledPawn->AddMovementInput(WorldDirection);
 		}
+	}
+	else
+	{
+		GetASC()->AbilityInputTagHeld(InputTag);
 	}
 
 }
