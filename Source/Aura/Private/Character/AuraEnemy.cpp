@@ -17,6 +17,8 @@ void AAuraEnemy::InitAbilityActorInfo()
 {
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
 	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->OnAbilityActorActorInfoSet();
+
+	InitializeDefaultAttributes();
 }
 
 AAuraEnemy::AAuraEnemy()

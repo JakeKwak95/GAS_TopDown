@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "GameplayEffectTypes.h"
 #include "AuraProjectile.generated.h"
 
 UCLASS()
@@ -16,6 +17,9 @@ public:
 
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<class UProjectileMovementComponent> ProjectileMovement;
+
+	UPROPERTY(BlueprintReadWrite, meta = (ExposeOnSpawn = true))
+	FGameplayEffectSpecHandle DamageEffectSpecHandle;
 
 	virtual void Destroyed() override;
 
