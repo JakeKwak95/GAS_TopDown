@@ -23,6 +23,8 @@ public:
 	virtual void HighlightActor() override;
 	virtual void UnHighlightActor() override;
 
+	virtual void Die() override;
+
 	virtual int32 GetPlayerLevel() const override;
 
 	UPROPERTY(BlueprintAssignable)
