@@ -67,6 +67,17 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "Abilities")
 	void AddCharacterAbilities();
 
+	void Dissolve();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void StartDissolveTimeline(UMaterialInstanceDynamic* MaterialInstanceDynamic, UMaterialInstanceDynamic* WeaponMaterialInstanceDynamic);
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	TObjectPtr<UMaterialInstance> DissolveMaterialInstance;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	TObjectPtr<UMaterialInstance> WeaponDissolveMaterialInstance;
+
 private:
 	UPROPERTY(EditAnywhere, Category = "Abilities")
 	TArray<TSubclassOf<UGameplayAbility>> StartupAbilities;
