@@ -140,10 +140,10 @@ public:
 	FGameplayAttributeData Health;	
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, Health)
 
-
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Mana, Category = "Vital Attributes")
 	FGameplayAttributeData Mana;
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, Mana)
+
 
 	/*
     Meta Attributes

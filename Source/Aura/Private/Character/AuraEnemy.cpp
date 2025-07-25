@@ -7,12 +7,14 @@
 #include "Components/WidgetComponent.h"
 #include "UI/Widget/AuraUserWidget.h"
 #include "AbilitySystem/AuraAbilitySystemLibrary.h"
+#include "Aura/public/AuraGameplayTags.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 
 void AAuraEnemy::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	GetCharacterMovement()->MaxWalkSpeed = BaseWalkSpeed;
 	InitAbilityActorInfo();
 
 	const auto HealthBar = Cast<UAuraUserWidget>(HealthBarWidget->GetUserWidgetObject());
@@ -30,10 +32,21 @@ void AAuraEnemy::BeginPlay()
 			OnMaxHealthChanged.Broadcast(Data.NewValue);
 		}
 	);
+	AbilitySystemComponent->RegisterGameplayTagEvent(FAuraGameplayTags::Get().Effects_HitReact).AddUObject(
+		this,
+		&AAuraEnemy::HitReactTagChanged
+	);
 
 	OnHealthChanged.Broadcast(AuraAS->GetHealth());
 	OnMaxHealthChanged.Broadcast(AuraAS->GetMaxHealth());
 }
+
+void AAuraEnemy::HitReactTagChanged(const FGameplayTag CallbackTag, int32 NewCount)
+{
+	bHitReacting = NewCount > 0;
+	GetCharacterMovement()->MaxWalkSpeed = bHitReacting ? 0.f : BaseWalkSpeed;
+}
+
 
 void AAuraEnemy::InitAbilityActorInfo()
 {
