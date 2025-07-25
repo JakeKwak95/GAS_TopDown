@@ -54,7 +54,7 @@ protected:
 	TSubclassOf<UGameplayEffect> InitialAttributes;
 
 	void ApplyEffectToSelf(TSubclassOf<UGameplayEffect> EffectClass, float level) const;
-	void InitializeDefaultAttributes() const;
+	virtual void InitializeDefaultAttributes() const;
 
 	UFUNCTION(BlueprintCallable, Category = "Abilities")
 	void AddCharacterAbilities();
