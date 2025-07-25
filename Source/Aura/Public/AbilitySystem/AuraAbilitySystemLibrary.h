@@ -26,4 +26,7 @@ public:
 	static void InitializeDefaultAttributes(const UObject* WorldContextObject,ECharacterClass CharacterClass, float Level, UAbilitySystemComponent* ASC);
 
 	static void ApplyEffectSpec(UAbilitySystemComponent* ASC, AActor* AvatarActor, FCharacterClassDefaultInfo& ClassDefaultInfo, float Level, TSubclassOf<UGameplayEffect> Attributes);
+
+	UFUNCTION(BlueprintCallable, Category = "AuraAbilitySystemLibrary|CharacterClassDefaults")
+	static void GiveStartingAbilities(const UObject* WorldContextObject, UAbilitySystemComponent* ASC);
 };
