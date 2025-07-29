@@ -5,6 +5,8 @@
 #include "AuraGameplayTags.h" 
 #include "AbilitySystemComponent.h"
 #include "AbilitySystem/AuraAttributeSet.h"
+#include <AbilitySystem/AuraAbilitySystemLibrary.h>
+#include <Interaction/CombatInterface.h>
 
 struct AuraDamageStatics 
 {
@@ -41,6 +43,9 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	AActor* SourceActor = SourceASC ? SourceASC->GetAvatarActor() : nullptr;
 	AActor* TargetActor = TargetASC ? TargetASC->GetAvatarActor() : nullptr;
 
+	ICombatInterface* SourceCombatInterface = Cast<ICombatInterface>(SourceActor);
+	ICombatInterface* TargetCombatInterface = Cast<ICombatInterface>(TargetActor);
+
 	const auto Spec = ExecutionParams.GetOwningSpec();
 
 	const FGameplayTagContainer* SourceTags = Spec.CapturedSourceTags.GetAggregatedTags();
@@ -70,9 +75,16 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().ArmorPenetrationDef, EvaluateParams, ArmorPenetration);
 	ArmorPenetration = FMath::Max(ArmorPenetration, 0.f);
 
-	const float EffectiveArmor = Armor *= 1 - (ArmorPenetration / 100.f);
-	Damage *= 1 - (EffectiveArmor / 100.f);
+	const UCharacterClassInfo* ClassInfo = UAuraAbilitySystemLibrary::GetCharacterClassInfo(SourceActor);
 
+	const FRealCurve* ArmorPenetrationCurve = ClassInfo->DamageCalculationCoefficients->FindCurve(FName("ArmorPenetration"), FString());
+	const float ArmorPenetrationCoefficient = ArmorPenetrationCurve->Eval(SourceCombatInterface->GetPlayerLevel());
+
+	const FRealCurve* EffectiveArmorCurve = ClassInfo->DamageCalculationCoefficients->FindCurve(FName("EffectiveArmor"), FString());
+	const float EffectiveArmorCoefficient = EffectiveArmorCurve->Eval(TargetCombatInterface->GetPlayerLevel());
+
+	const float EffectiveArmor = Armor *= 1 - (ArmorPenetration / 100.f)* ArmorPenetrationCoefficient;
+	Damage *= 1 - (EffectiveArmor / 100.f)* EffectiveArmorCoefficient;
 
 	const FGameplayModifierEvaluatedData EvaluatedData(UAuraAttributeSet::GetIncomingDamageAttribute(), EGameplayModOp::Additive, Damage);
 	OutExecutionOutput.AddOutputModifier(EvaluatedData);
