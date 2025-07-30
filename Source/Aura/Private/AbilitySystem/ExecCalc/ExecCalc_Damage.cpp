@@ -67,7 +67,11 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	FGameplayEffectContextHandle EffectContext = Spec.GetContext();
 
 	// Get Damage Set by Caller Magnitude
-	float Damage = Spec.GetSetByCallerMagnitude(FAuraGameplayTags::Get().Damage);
+	float Damage = 0.f;
+	for (auto Tag : FAuraGameplayTags::Get().DamageTypes)
+	{
+		Damage += Spec.GetSetByCallerMagnitude(Tag);
+	}
 
 	float Armor = 0;
 	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().ArmorDef, EvaluateParams, Armor);
