@@ -7,6 +7,7 @@
 #include "AbilitySystem/AuraAttributeSet.h"
 #include <AbilitySystem/AuraAbilitySystemLibrary.h>
 #include <Interaction/CombatInterface.h>
+#include "AuraAbilityTypes.h"
 
 struct AuraDamageStatics 
 {
@@ -63,6 +64,8 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	EvaluateParams.SourceTags = SourceTags;
 	EvaluateParams.TargetTags = TargetTags;
 
+	FGameplayEffectContextHandle EffectContext = Spec.GetContext();
+
 	// Get Damage Set by Caller Magnitude
 	float Damage = Spec.GetSetByCallerMagnitude(FAuraGameplayTags::Get().Damage);
 
@@ -100,19 +103,23 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	const FRealCurve* CriticalHitResistanceCurve = ClassInfo->DamageCalculationCoefficients->FindCurve(FName("CriticalHitResistance"), FString());
 	const float CriticalHitResistanceCoefficient = CriticalHitResistanceCurve->Eval(TargetCombatInterface->GetPlayerLevel());
 
-	if(FMath::FRandRange(0.0f, 100.f) < CriticalHitChance - CriticalHitResistance * CriticalHitResistanceCoefficient)
+	const bool bChriticalHit = FMath::FRandRange(0.0f, 100.f) < CriticalHitChance - CriticalHitResistance * CriticalHitResistanceCoefficient;
+	if(bChriticalHit)
 	{
 		Damage *= 1+(CriticalHitDamage / 100.f);
 	}
+	UAuraAbilitySystemLibrary::SetIsCriticalHit(EffectContext, bChriticalHit);
 
 	float BlockChance = 0;
     ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().BlockChanceDef, EvaluateParams, BlockChance);
 	BlockChance = FMath::Max(BlockChance, 0.f);
 
-	if(FMath::FRandRange(0.0f, 100.f) < BlockChance)
+	const bool bBolcked = FMath::FRandRange(0.0f, 100.f) < BlockChance;
+	if(bBolcked)
 	{
 		Damage *= .5f;
 	}
+	UAuraAbilitySystemLibrary::SetIsBlockedHit(EffectContext, bBolcked);
 
 	const FGameplayModifierEvaluatedData EvaluatedData(UAuraAttributeSet::GetIncomingDamageAttribute(), EGameplayModOp::Additive, Damage);
 	OutExecutionOutput.AddOutputModifier(EvaluatedData);

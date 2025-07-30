@@ -8,6 +8,7 @@
 #include <Interaction/CombatInterface.h>
 #include "Kismet/GameplayStatics.h"
 #include <Player/AuraPlayerController.h>
+#include <AbilitySystem/AuraAbilitySystemLibrary.h>
 
 UAuraAttributeSet::UAuraAttributeSet()
 {
@@ -123,12 +124,14 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 				}
 			}
 
-			ShowFloatingText(Props, LocalIncomingDamage);
+			const bool bBlocked = UAuraAbilitySystemLibrary::IsBlockedHit(Props.EffectContextHandle);
+			const bool bCritical = UAuraAbilitySystemLibrary::IsCriticalHit(Props.EffectContextHandle);
+			ShowFloatingText(Props, LocalIncomingDamage, bBlocked, bCritical);
 		}
 	}
 }
 
-void UAuraAttributeSet::ShowFloatingText(FEffectProperties& Props, const float LocalIncomingDamage) const
+void UAuraAttributeSet::ShowFloatingText(const FEffectProperties& Props, const float LocalIncomingDamage, bool bBlockedHit, bool bCriticalHit) const
 {
 
 	if (Props.SourceCharacter != Props.TargetCharacter)
