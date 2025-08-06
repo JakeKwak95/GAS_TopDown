@@ -19,6 +19,7 @@ class AURA_API AAuraEnemy : public AAuraCharacterBase, public IEnemyInterface
 	
 public:
 	AAuraEnemy();
+	virtual void PossessedBy(AController* NewController) override;
 
 	virtual void HighlightActor() override;
 	virtual void UnHighlightActor() override;
@@ -56,6 +57,12 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character Class Defaults")
 	ECharacterClass CharacterClass = ECharacterClass::Warrior;
+
+	UPROPERTY(EditAnywhere, Category = "AI")
+	TObjectPtr<class UBehaviorTree> BehaviorTree;
+
+	UPROPERTY()
+	TObjectPtr<class AAuraAIController> AuraAIController;
 private:
 
 };
