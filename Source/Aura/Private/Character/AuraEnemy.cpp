@@ -14,6 +14,23 @@
 #include "BehaviorTree/BehaviorTree.h"
 
 
+AAuraEnemy::AAuraEnemy()
+{
+	GetMesh()->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
+
+	AbilitySystemComponent = CreateDefaultSubobject<UAuraAbilitySystemComponent>("AbilitySystemComponent");
+	AbilitySystemComponent->SetIsReplicated(true);
+	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
+
+	bUseControllerRotationYaw = false;
+	GetCharacterMovement()->bUseControllerDesiredRotation = true;
+
+	AttributeSet = CreateDefaultSubobject<UAuraAttributeSet>("AttributeSet");
+
+	HealthBarWidget = CreateDefaultSubobject<UWidgetComponent>("HealthBar");
+	HealthBarWidget->SetupAttachment(GetRootComponent());
+}
+
 void AAuraEnemy::BeginPlay()
 {
 	Super::BeginPlay();
@@ -67,19 +84,6 @@ void AAuraEnemy::InitAbilityActorInfo()
 	}
 }
 
-AAuraEnemy::AAuraEnemy()
-{
-	GetMesh()->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
-
-	AbilitySystemComponent = CreateDefaultSubobject<UAuraAbilitySystemComponent>("AbilitySystemComponent");
-	AbilitySystemComponent->SetIsReplicated(true);
-	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
-
-	AttributeSet = CreateDefaultSubobject<UAuraAttributeSet>("AttributeSet");
-
-	HealthBarWidget = CreateDefaultSubobject<UWidgetComponent>("HealthBar");
-	HealthBarWidget->SetupAttachment(GetRootComponent());
-}
 
 void AAuraEnemy::PossessedBy(AController* NewController)
 {
