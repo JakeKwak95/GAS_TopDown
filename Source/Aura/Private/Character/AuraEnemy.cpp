@@ -39,7 +39,7 @@ void AAuraEnemy::BeginPlay()
 	AddCharacterAbilities();
 	if (HasAuthority())
 	{
-		UAuraAbilitySystemLibrary::GiveStartingAbilities(this, AbilitySystemComponent);
+		UAuraAbilitySystemLibrary::GiveStartingAbilities(this, AbilitySystemComponent, CharacterClass);
 	}
 
 	const auto HealthBar = Cast<UAuraUserWidget>(HealthBarWidget->GetUserWidgetObject());

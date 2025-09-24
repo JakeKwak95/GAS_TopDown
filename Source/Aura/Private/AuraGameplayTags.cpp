@@ -12,7 +12,7 @@ void FAuraGameplayTags::InitializeNativeGameplayTags()
 	Instance.Attributes_Secondary_Armor = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Attributes.Secondary.Armor"), FString("Reduces damage taken, improves Block Chance"));
 
 	/*
-    * Primary Attributes
+	* Primary Attributes
 	*/
 
 	Instance.Attributes_Primary_Strength = UGameplayTagsManager::Get().AddNativeGameplayTag(
@@ -89,9 +89,9 @@ void FAuraGameplayTags::InitializeNativeGameplayTags()
 		FString("Maximum amount of Mana obtainable")
 	);
 
-   /*
-   * Input Tags
-   */
+	/*
+	* Input Tags
+	*/
 
 	Instance.InputTag_LMB = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("InputTag.LMB"),
@@ -125,8 +125,8 @@ void FAuraGameplayTags::InitializeNativeGameplayTags()
 
 
 	/*
-    * Damage Types
-    */
+	* Damage Types
+	*/
 
 
 	Instance.Damage = UGameplayTagsManager::Get().AddNativeGameplayTag(
@@ -189,4 +189,16 @@ void FAuraGameplayTags::InitializeNativeGameplayTags()
 		FName("Effects.HitReact"),
 		FString("Tag granted when Hit Reacting")
 	);
+
+	/*
+	 * Abilities
+	 */
+
+	Instance.Abilities_Attack = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Abilities.Attack"),
+		FString("Attack Ability Tag")
+
+	);
+
+
 }
